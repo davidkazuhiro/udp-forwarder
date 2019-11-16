@@ -1,4 +1,12 @@
 from pyroute2 import IPRoute
+from netifaces import interfaces, ifaddresses
+
+for interface in interfaces():
+    print(interface)
+    print(ifaddresses(interface))
+    print()
+ 
+
 
 # create RTNL socket
 ipr = IPRoute()
@@ -6,11 +14,15 @@ ipr = IPRoute()
 # subscribe to broadcast messages
 ipr.bind()
 
+print("Receiving data...")
+
 # wait for data (do not parse it)
 data = ipr.recv(65535)
 
 # parse received data
 messages = ipr.marshal.parse(data)
+
+print(messages)
 
 # shortcut: recv() + parse()
 #
@@ -18,3 +30,5 @@ messages = ipr.marshal.parse(data)
 # simplicity it's enough to say so)
 #
 messages = ipr.get()
+
+print(messages)
