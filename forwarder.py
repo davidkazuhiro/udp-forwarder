@@ -20,7 +20,7 @@ s.bind((interface, protocol))
 print("Receiving packets...")
 ready = select([s], [], [], 5)
 if ready[0]:
-    obj = s.recv(1024)
+    obj = s.recvfrom(1024)
     print("Printing object...")
     print(obj)
 else:
