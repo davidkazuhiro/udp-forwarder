@@ -9,9 +9,9 @@ for interface in interfaces():
 
 print("Binding to socket...")
 s = socket(AF_PACKET, SOCK_RAW)
-s.bind(("eth0", 0))
+s.bind(("eth0", 4))
 
-print("s.recv(4096...")
+print("s.recv(4096)...")
 obj = s.recv(4096)
 
 print("Printing object...")
