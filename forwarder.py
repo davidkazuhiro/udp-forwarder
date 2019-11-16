@@ -1,40 +1,14 @@
-from pyroute2 import IPRoute
+from socket import socket, AF_PACKET, SOCK_RAW
 from netifaces import interfaces, ifaddresses
 
 for interface in interfaces():
     print(interface)
     print(ifaddresses(interface))
     print()
- 
 
+s = socket(AF_PACKET, SOCK_RAW)
+s.bind(("eth0", 0))
 
-# create RTNL socket
-ipr = IPRoute()
+obj = s.recv(4096)
 
-# subscribe to broadcast messages
-ipr.bind()
-
-print("Receiving data...")
-
-# wait for data (do not parse it)
-data = ipr.recv(65535)
-
-print("Parsing data...")
-
-# parse received data
-messages = ipr.marshal.parse(data)
-
-print("Printing messages with ipr.marshal.parse(data)")
-
-print(messages)
-
-# shortcut: recv() + parse()
-#
-# (under the hood is much more, but for
-# simplicity it's enough to say so)
-#
-messages = ipr.get()
-
-print("Printing messages with ipr.get()")
-
-print(messages)
+print(obj)
