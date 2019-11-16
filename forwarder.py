@@ -1,11 +1,11 @@
-from socket import socket, AF_PACKET, SOCK_RAW, getprotobyname
 from netifaces import interfaces, ifaddresses
+from select import select
+from socket import socket, AF_PACKET, SOCK_RAW, getprotobyname
 
 interface = "eth0"
 protocol = getprotobyname('udp')
 
-
-print("Printing Interfaces...")
+print("\nPrinting Interfaces...")
 for interface in interfaces():
     print(interface)
     for entry in ifaddresses(interface):
@@ -14,10 +14,15 @@ for interface in interfaces():
 
 print("Binding to socket...")
 s = socket(AF_PACKET, SOCK_RAW)
+s.setblocking(0)
 s.bind((interface, protocol))
 
 print("Receiving packets...")
-obj = s.recv(1024)
+ready = select([s], [], [], 5)
+if ready[0]:
+    obj = s.recv(1024)
+    print("Printing object...")
+    print(obj)
+else:
+    print("Timed out")
 
-print("Printing object...")
-print(obj)
