@@ -14,15 +14,8 @@ for interface in interfaces():
 
 print("Binding to socket...")
 s = socket(AF_PACKET, SOCK_RAW)
-s.setblocking(0)
-s.bind((interface, protocol))
 
 print("Receiving packets...")
-ready = select([s], [], [], 5)
-if ready[0]:
-    obj = s.recvfrom(1024)
-    print("Printing object...")
-    print(obj)
-else:
-    print("Timed out")
-
+while True:
+    raw_data, addr = s.recvfrom(65535)
+    print(raw_data, addr)
