@@ -1,6 +1,6 @@
 from netifaces import interfaces, ifaddresses
 from select import select
-from socket import socket, AF_PACKET, SOCK_RAW, getprotobyname
+from socket import socket, AF_PACKET, SOCK_RAW, getprotobyname, ntohs
 
 interface = "eth0"
 protocol = getprotobyname('udp')
@@ -13,7 +13,7 @@ for interface in interfaces():
     print()
 
 print("Binding to socket...")
-s = socket(AF_PACKET, SOCK_RAW)
+s = socket(AF_PACKET, SOCK_RAW, ntohs(3))
 
 print("Receiving packets...")
 while True:
